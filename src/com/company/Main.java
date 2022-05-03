@@ -2,6 +2,7 @@ package com.company;
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -26,7 +27,10 @@ public class Main {
 
         To-do
 
+        Done
         validate amount input (check if it has comma (,) and 2 decimals after comma
+        fix exit/repeat flow
+
 
      */
 
@@ -56,6 +60,10 @@ public class Main {
         boolean validateCurrencyFrom = false;
         boolean validateCurrencyTo = false;
         boolean validateAmount = false;
+        boolean validateExit = false;
+        BigDecimal checkamount = BigDecimal.valueOf(0);
+
+        int decimal_digits_amount = 0;
 
 
 
@@ -97,10 +105,17 @@ public class Main {
 
             while(!validateAmount)
             {
-                System.out.println("Please, insert the amount you want to convert using a comma (,) for cents : ");
+                // Must have <= 2 decimal_digits
+                // 100.00000 <- Double.parseDouble(amountInput) converts to 100.0
+                System.out.println("Please, insert the amount you want to convert using a comma (,) for decimal ( max 2 decimal digits ) : ");
                 amountInput = sc.nextLine();
+                amountInput = amountInput.replaceAll(",",".");
                 amount = Double.parseDouble(amountInput);
-                if (amount <= 0.00)
+                checkamount = BigDecimal.valueOf(amount) ;
+                decimal_digits_amount = checkamount.scale(); // how many decimal digits after "."/
+
+                ;
+                if (amount <= 0 || decimal_digits_amount > 2)
                 {
                     System.out.println("Invalid input. Please type a valid amount");
                 } else
@@ -111,17 +126,33 @@ public class Main {
             }
             convert(currency_from, currency_to, amount);
 
-            System.out.println("Do you want to convert again? Type Y for Yes, N for no:");
-            exitInput = sc.nextLine().toUpperCase();
+            while(!validateExit)
+            {
 
-            if (exitInput.equals("Y"))
-            {
-                continue;
-            } else if (exitInput.equals("N"))
-            {
-                exit = true;
-                sc.close();
+                System.out.println("Do you want to convert again? Type Y for Yes, N for no:");
+                exitInput = sc.nextLine().toUpperCase();
+
+                if(!(exitInput.equals("Y") || exitInput.equals("N")))
+                {
+                    System.out.println("Invalid input. Please type Y or N.");
+                }
+                else if (exitInput.equals("Y"))
+                {
+                    // resets while loops
+                    validateCurrencyFrom = false;
+                    validateCurrencyTo = false;
+                    validateAmount = false;
+                    validateExit = true;
+
+                } else if (exitInput.equals("N"))
+                {
+                    exit = true;
+                    validateExit = true;
+                    sc.close();
+                }
             }
+
+            validateExit = false;
 
 
         }

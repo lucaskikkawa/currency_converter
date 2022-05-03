@@ -89,7 +89,7 @@ public class Converter
                     currency_from_name,
                     currency_to,
                     currency_to_name);
-            String converted_msg = String.format("%s%.2f is equal to %s%.2f.",currency_from_symbol,amount,currency_to_symbol,converted_amount);
+            String converted_msg = String.format("%s%.2f %s is equal to %s%.2f %s.",currency_from_symbol,amount,currency_from_name,currency_to_symbol,converted_amount,currency_to_name);
 
             System.out.println(convert_msg);
             System.out.println(converted_msg);
