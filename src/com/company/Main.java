@@ -110,17 +110,23 @@ public class Main {
                 System.out.println("Please, insert the amount you want to convert using a comma (,) for decimal ( max 2 decimal digits ) : ");
                 amountInput = sc.nextLine();
                 amountInput = amountInput.replaceAll(",",".");
-                amount = Double.parseDouble(amountInput);
-                checkamount = BigDecimal.valueOf(amount) ;
-                decimal_digits_amount = checkamount.scale(); // how many decimal digits after "."/
-
-                ;
-                if (amount <= 0 || decimal_digits_amount > 2)
+                if (amountInput.matches("[0-9]+"))
                 {
-                    System.out.println("Invalid input. Please type a valid amount");
+                    amount = Double.parseDouble(amountInput);
+                    checkamount = BigDecimal.valueOf(amount);
+                    decimal_digits_amount = checkamount.scale(); // how many decimal digits after "."/
+
+                    ;
+                    if (amount <= 0 || decimal_digits_amount > 2)
+                    {
+                        System.out.println("Invalid input. Please type a valid amount");
+                    } else
+                    {
+                        validateAmount = true;
+                    }
                 } else
                 {
-                    validateAmount = true;
+                    System.out.println("Invalid input. Only numbers are allowed.");
                 }
 
             }
